@@ -1,4 +1,11 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leave_request_app/constants/app_constant.dart';
+import 'package:leave_request_app/data/response/user_response.dart';
+import 'package:leave_request_app/helper/api_exception.dart';
+import 'package:leave_request_app/helper/dio_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:leave_request_app/domain/model/user.dart';
 import 'package:leave_request_app/domain/repository/user_repository.dart';
@@ -7,34 +14,43 @@ import 'package:leave_request_app/helper/db_helper.dart';
 part 'user_repository_impl.g.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  final DatabaseHelper _dbHelper = DatabaseHelper();
+  UserRepositoryImpl(this.client);
+  final Dio client;
 
   @override
   Future<void> insertUser(User user) async {
-    final db = await _dbHelper.database;
-    await db.insert('user', user.toMap());
+    // final db = await _dbHelper.database;
+    // await db.insert('user', user.toMap());
   }
 
   @override
-  Future<User?> login(String email, String password) async {
-    final db = await _dbHelper.database;
-    List<Map<String, dynamic>> maps = await db.query(
-      'user',
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
-    );
+  Future<UserResponse?> login(String email, String password) async {
+    try {
+      final response = await client.post(
+        AppConstant.loginEndpoint,
+        data: {'email': email, 'password': password},
+      );
 
-    if (maps.isNotEmpty) {
-      final data = User.fromMap(maps.first);
-
-      return data;
-    } else {
-      return null;
+      return UserResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (e.response != null) {
+        // Handle server error
+        final serverMessage =
+            e.response?.data['message'] ?? 'Server error occurred';
+        throw ApiException(serverMessage);
+      } else {
+        // Handel no response from server
+        throw ApiException('Network error. Please check your connection.');
+      }
+    } catch (e) {
+      // Handel unexpected error
+      throw ApiException('An unexpected error occurred.');
     }
   }
 }
 
 @riverpod
 UserRepository userRepository(Ref ref) {
-  return UserRepositoryImpl();
+  final client = ref.read(dioProvider);
+  return UserRepositoryImpl(client);
 }

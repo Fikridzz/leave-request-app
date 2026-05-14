@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leave_request_app/helper/auth_storage_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:leave_request_app/data/repository/home_repository.dart';
 import 'package:leave_request_app/domain/model/employee_form.dart';
@@ -11,12 +12,8 @@ part 'home_controller.g.dart';
 
 @riverpod
 FutureOr<List<EmployeeForm>> getEmployeeForm(Ref ref) async {
-  final prefs = await ref.watch(sharedPreferencesProvider.future);
-  final userData = User.fromMap(jsonDecode(prefs.getString('user_data') ?? ''));
 
-  return await ref
-      .watch(homeRepositoryProvider)
-      .employeeForms(userData.id ?? 0);
+  return [];
 }
 
 @riverpod
@@ -27,8 +24,8 @@ class ProfileController extends _$ProfileController {
   Future<void> logout() async {
     state = AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final prefs = await ref.watch(sharedPreferencesProvider.future);
-      prefs.clear();
+      final storage = ref.watch(authStorageServiceProvider);
+      storage.clearAll();
     });
   }
 }

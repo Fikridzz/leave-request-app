@@ -1,25 +1,19 @@
 class User {
   final int? id;
-  final String name;
-  final int phoneNumber;
-  final String email;
-  final String password;
+  final String? name;
+  final String? department;
+  final int? phoneNumber;
+  final String? email;
 
-  User({
-    this.id,
-    this.name = '',
-    this.phoneNumber = 0,
-    this.email = '',
-    this.password = '',
-  });
+  User({this.id, this.name, this.department, this.phoneNumber, this.email});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       'id': id,
       'name': name,
+      'department': department,
       'phone_number': phoneNumber,
       'email': email,
-      'password': password,
     };
     return map;
   }
@@ -28,9 +22,9 @@ class User {
     return User(
       id: map['id'],
       name: map['name'],
+      department: map['department'],
       phoneNumber: map['phone_number'],
       email: map['email'],
-      password: map['password'],
     );
   }
 }

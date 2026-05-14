@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:leave_request_app/constants/app_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:leave_request_app/view/form/view/form_leave_view.dart';
 import 'package:leave_request_app/view/form/view/form_sick_view.dart';
@@ -44,13 +45,13 @@ class AppRouter {
         ),
       ],
       redirect: (context, state) {
-        final isLoggedIn = prefs.getBool('is_loggedin') ?? false;
+        final authToken = prefs.getString(AppConstant.tokenKey);
 
-        if (isLoggedIn && state.fullPath == '/login') {
+        if (authToken != null && authToken.isNotEmpty && state.fullPath == '/login') {
           return '/';
         }
 
-        if (!isLoggedIn && state.fullPath == '/') {
+        if (authToken == null && state.fullPath == '/') {
           return '/login';
         }
 

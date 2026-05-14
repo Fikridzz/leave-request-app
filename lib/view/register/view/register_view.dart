@@ -181,21 +181,21 @@ class RegisterView extends HookConsumerWidget {
                           child: ElevatedButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                ref
-                                    .read(registerControllerProvider.notifier)
-                                    .insertUser(
-                                      user: User(
-                                        name: nameCtrl.text,
-                                        phoneNumber: int.parse(
-                                          phoneNumberCtrl.text,
-                                        ),
-                                        email: emailCtrl.text,
-                                        password: passwordCtrl.text,
-                                      ),
-                                      onSuccess: () {
-                                        context.pushReplacement('/login');
-                                      },
-                                    );
+                                // ref
+                                //     .read(registerControllerProvider.notifier)
+                                //     .insertUser(
+                                //       user: User(
+                                //         name: nameCtrl.text,
+                                //         phoneNumber: int.parse(
+                                //           phoneNumberCtrl.text,
+                                //         ),
+                                //         email: emailCtrl.text,
+                                //         password: passwordCtrl.text,
+                                //       ),
+                                //       onSuccess: () {
+                                //         context.pushReplacement('/login');
+                                //       },
+                                //     );
                               }
                             },
                             style: ElevatedButton.styleFrom(
