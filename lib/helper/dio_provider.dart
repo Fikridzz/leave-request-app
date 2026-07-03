@@ -20,12 +20,12 @@ Dio dio(Ref ref) {
     ),
   );
 
-  final storage = ref.read(authStorageServiceProvider);
-  String? authToken = storage.getToken();
-
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
+        final storage = ref.watch(authStorageServiceProvider);
+        String? authToken = storage.getToken();
+
         if (authToken != null) {
           options.headers['Authorization'] = 'Bearer $authToken';
         }

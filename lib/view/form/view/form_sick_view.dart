@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -6,27 +7,33 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:leave_request_app/constants/submission_status.dart';
+import 'package:leave_request_app/constants/submission_type.dart';
+import 'package:leave_request_app/domain/model/data_leave_form.dart';
+import 'package:leave_request_app/domain/model/employee_form.dart';
+import 'package:leave_request_app/helper/auth_storage_service.dart';
+import 'package:leave_request_app/helper/string_extension.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signature/signature.dart';
-import 'package:leave_request_app/domain/model/data_leave_form.dart';
-import 'package:leave_request_app/domain/model/data_sick_form.dart';
 import 'package:leave_request_app/domain/model/user.dart';
 import 'package:leave_request_app/view/form/controller/form_controller.dart';
 
 class FormSickView extends HookConsumerWidget {
-  const FormSickView({super.key});
+  final EmployeeForm? initialData;
+  const FormSickView(this.initialData, {super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = GlobalKey<FormState>();
     final nameCtrl = useTextEditingController();
-    final departmenCtrl = useTextEditingController();
+    // final departmenCtrl = useTextEditingController();
     final submitDateCtrl = useTextEditingController();
     final sickDateCtrl = useTextEditingController();
     final totalDayCtrl = useTextEditingController();
     final submitDate = useState<DateTime?>(null);
     final sickDate = useState<DateTime?>(null);
-    final signatureImg = useState<Uint8List?>(null);
-    final userData = useState<User?>(null);
+    final signatureImg = useState<File?>(null);
+    final storage = ref.read(authStorageServiceProvider).getUser();
 
     SignatureController signatureCtrl = SignatureController(
       penStrokeWidth: 1,
@@ -36,16 +43,14 @@ class FormSickView extends HookConsumerWidget {
     );
 
     useEffect(() {
-      Future<void> getUser() async {
-        final prefs = await SharedPreferences.getInstance();
-        final data = prefs.getString('user_data');
-
-        userData.value = User.fromMap(jsonDecode(data ?? ''));
-
-        nameCtrl.text = userData.value?.name ?? '';
+      if (initialData == null) {
+        nameCtrl.text = storage?.name ?? '';
+      } else {
+        nameCtrl.text = initialData?.name ?? '';
+        submitDateCtrl.text = initialData?.submissionDate.ddMMMyyyy() ?? '';
+        sickDateCtrl.text = initialData?.startDate.ddMMMyyyy() ?? '';
+        totalDayCtrl.text = initialData?.totalDays.toString() ?? '';
       }
-
-      getUser();
 
       return null;
     }, []);
@@ -56,6 +61,28 @@ class FormSickView extends HookConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            PopupMenuButton(
+              onSelected: (value) => ref
+                  .read(formControllerProvider.notifier)
+                  .updateFormStatus(initialData ?? EmployeeForm(), value.name),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    value: SubmissionStatus.approved,
+                    child: Text('Setuju'),
+                  ),
+                  PopupMenuItem(
+                    value: SubmissionStatus.rejected,
+                    child: Text('Tolak'),
+                  ),
+                ];
+              },
+            ),
+          ],
+          actionsPadding: EdgeInsets.symmetric(horizontal: 16),
+        ),
         body: Center(
           child: Form(
             key: formKey,
@@ -111,47 +138,49 @@ class FormSickView extends HookConsumerWidget {
                           },
                         ),
                         SizedBox(height: 24),
-                        TextFormField(
-                          controller: departmenCtrl,
-                          decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blue,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            labelText: 'Departemen',
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                            floatingLabelStyle: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            hintStyle: const TextStyle(
-                              color: Color.fromARGB(125, 0, 0, 0),
-                              fontSize: 14,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Departemen tidak boleh kosong';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 24),
+                        // TextFormField(
+                        //   controller: departmenCtrl,
+                        //   decoration: InputDecoration(
+                        //     floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        //     border: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(7),
+                        //     ),
+                        //     focusedBorder: OutlineInputBorder(
+                        //       borderSide: BorderSide(
+                        //         color: Colors.blue,
+                        //         width: 2,
+                        //       ),
+                        //       borderRadius: BorderRadius.circular(7),
+                        //     ),
+                        //     labelText: 'Departemen',
+                        //     labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                        //     floatingLabelStyle: TextStyle(
+                        //       color: Colors.blue,
+                        //       fontWeight: FontWeight.bold,
+                        //     ),
+                        //     hintStyle: const TextStyle(
+                        //       color: Color.fromARGB(125, 0, 0, 0),
+                        //       fontSize: 14,
+                        //     ),
+                        //   ),
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return 'Departemen tidak boleh kosong';
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
+                        // SizedBox(height: 24),
                         TextFormField(
                           controller: submitDateCtrl,
                           onTap: () {
-                            _selectDateSubmit(
-                              submitDateCtrl,
-                              submitDate,
-                              context,
-                            );
+                            if (initialData == null) {
+                              _selectDateSubmit(
+                                submitDateCtrl,
+                                submitDate,
+                                context,
+                              );
+                            }
                           },
                           readOnly: true,
                           decoration: InputDecoration(
@@ -189,13 +218,15 @@ class FormSickView extends HookConsumerWidget {
                         TextFormField(
                           controller: sickDateCtrl,
                           onTap: () {
-                            _selectDateLeave(
-                              sickDateCtrl,
-                              totalDayCtrl,
-                              submitDate,
-                              sickDate,
-                              context,
-                            );
+                            if (initialData == null) {
+                              _selectDateLeave(
+                                sickDateCtrl,
+                                totalDayCtrl,
+                                submitDate,
+                                sickDate,
+                                context,
+                              );
+                            }
                           },
                           readOnly: true,
                           decoration: InputDecoration(
@@ -210,7 +241,7 @@ class FormSickView extends HookConsumerWidget {
                               ),
                               borderRadius: BorderRadius.circular(7),
                             ),
-                            labelText: 'Tanggal Cuti',
+                            labelText: 'Tanggal Izin',
                             labelStyle: TextStyle(fontWeight: FontWeight.bold),
                             floatingLabelStyle: TextStyle(
                               color: Colors.blue,
@@ -223,7 +254,7 @@ class FormSickView extends HookConsumerWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Tanggal cuti tidak boleh kosong';
+                              return 'Tanggal izin tidak boleh kosong';
                             }
                             return null;
                           },
@@ -244,7 +275,7 @@ class FormSickView extends HookConsumerWidget {
                               ),
                               borderRadius: BorderRadius.circular(7),
                             ),
-                            labelText: 'Jumlah Cuti',
+                            labelText: 'Jumlah Izin',
                             labelStyle: TextStyle(fontWeight: FontWeight.bold),
                             floatingLabelStyle: TextStyle(
                               color: Colors.blue,
@@ -257,7 +288,7 @@ class FormSickView extends HookConsumerWidget {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Jumlah cuti tidak boleh kosong';
+                              return 'Jumlah izin tidak boleh kosong';
                             }
                             return null;
                           },
@@ -273,11 +304,13 @@ class FormSickView extends HookConsumerWidget {
                         SizedBox(height: 8),
                         GestureDetector(
                           onTap: () {
-                            showDialogSignature(
-                              context,
-                              signatureCtrl,
-                              signatureImg,
-                            );
+                            if (initialData == null) {
+                              showDialogSignature(
+                                context,
+                                signatureCtrl,
+                                signatureImg,
+                              );
+                            }
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -285,51 +318,54 @@ class FormSickView extends HookConsumerWidget {
                             width: 160,
                             height: 120,
                             child: signatureImg.value != null
-                                ? Image.memory(signatureImg.value!)
+                                ? Image.file(signatureImg.value!)
                                 : Text('Tanda tanggan'),
                           ),
                         ),
                         SizedBox(height: 8),
-                        Text('(${userData.value?.name})'),
+                        Text('(${nameCtrl.text})'),
                         Spacer(),
                         SizedBox(height: 36),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 52,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                ref
-                                    .read(formControllerProvider.notifier)
-                                    .insertSickForm(
-                                      DataSickForm(
-                                        employeeName: nameCtrl.text,
-                                        department: departmenCtrl.text,
-                                        submissionDate: submitDateCtrl.text,
-                                        sickDate: sickDateCtrl.text,
-                                        totalSickDate: int.tryParse(
-                                          totalDayCtrl.text,
-                                        ),
-                                        userId: userData.value?.id,
-                                      ),
-                                    );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadiusGeometry.circular(30),
+                        initialData != null
+                            ? SizedBox()
+                            : SizedBox(
+                                width: double.infinity,
+                                height: 52,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      ref
+                                          .read(formControllerProvider.notifier)
+                                          .createForm(
+                                            DataLeaveForm(
+                                              type: SubmissionType.sick.name,
+                                              submissionDate: submitDate.value
+                                                  .toString(),
+                                              startDate: sickDate.value
+                                                  .toString(),
+                                              totalDays: totalDayCtrl.text
+                                                  .toInt(),
+                                              autograph: signatureImg.value,
+                                            ),
+                                          );
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusGeometry.circular(30),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Ajukan',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: Text(
-                              'Ajukan',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -392,7 +428,7 @@ class FormSickView extends HookConsumerWidget {
   void showDialogSignature(
     BuildContext context,
     SignatureController signatureCtrl,
-    ValueNotifier<Uint8List?> signatureImg,
+    ValueNotifier<File?> signatureImg,
   ) {
     showDialog(
       barrierDismissible: false,
@@ -445,7 +481,7 @@ class FormSickView extends HookConsumerWidget {
   void exportImage(
     BuildContext context,
     SignatureController signatureCtrl,
-    ValueNotifier<Uint8List?> signatureImg,
+    ValueNotifier<File?> signatureImg,
   ) async {
     if (signatureCtrl.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -458,9 +494,14 @@ class FormSickView extends HookConsumerWidget {
       height: 300,
       width: 240,
     );
-    signatureImg.value = data;
+    final tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/image.png').create();
+
     if (data == null) {
       return;
     }
+
+    file.writeAsBytesSync(data);
+    signatureImg.value = file;
   }
 }

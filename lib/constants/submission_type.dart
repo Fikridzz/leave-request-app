@@ -1,0 +1,4 @@
+enum SubmissionType {
+  leave,
+  sick,
+}

@@ -11,39 +11,36 @@ part of 'user_response.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$UserResponse implements DiagnosticableTreeMixin {
 
- int get id; String? get name; String? get email; String? get department;@JsonKey(name: 'auth_token') String? get authToken;@JsonKey(name: 'created_at') String? get createdAt;@JsonKey(name: 'updated_at') String? get updatedAt;
+ int? get id; String? get name; String? get phone; String? get email; String? get department; String? get accessToken; String? get createdAt; String? get role;
 /// Create a copy of UserResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $UserResponseCopyWith<UserResponse> get copyWith => _$UserResponseCopyWithImpl<UserResponse>(this as UserResponse, _$identity);
 
-  /// Serializes this UserResponse to a JSON map.
-  Map<String, dynamic> toJson();
 
 @override
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'UserResponse'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('email', email))..add(DiagnosticsProperty('department', department))..add(DiagnosticsProperty('authToken', authToken))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('phone', phone))..add(DiagnosticsProperty('email', email))..add(DiagnosticsProperty('department', department))..add(DiagnosticsProperty('accessToken', accessToken))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('role', role));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.department, department) || other.department == department)&&(identical(other.authToken, authToken) || other.authToken == authToken)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.department, department) || other.department == department)&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.role, role) || other.role == role));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,department,authToken,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,phone,email,department,accessToken,createdAt,role);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'UserResponse(id: $id, name: $name, email: $email, department: $department, authToken: $authToken, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'UserResponse(id: $id, name: $name, phone: $phone, email: $email, department: $department, accessToken: $accessToken, createdAt: $createdAt, role: $role)';
 }
 
 
@@ -54,7 +51,7 @@ abstract mixin class $UserResponseCopyWith<$Res>  {
   factory $UserResponseCopyWith(UserResponse value, $Res Function(UserResponse) _then) = _$UserResponseCopyWithImpl;
 @useResult
 $Res call({
- int id, String? name, String? email, String? department,@JsonKey(name: 'auth_token') String? authToken,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'updated_at') String? updatedAt
+ int? id, String? name, String? phone, String? email, String? department, String? accessToken, String? createdAt, String? role
 });
 
 
@@ -71,15 +68,16 @@ class _$UserResponseCopyWithImpl<$Res>
 
 /// Create a copy of UserResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? email = freezed,Object? department = freezed,Object? authToken = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? phone = freezed,Object? email = freezed,Object? department = freezed,Object? accessToken = freezed,Object? createdAt = freezed,Object? role = freezed,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,department: freezed == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
-as String?,authToken: freezed == authToken ? _self.authToken : authToken // ignore: cast_nullable_to_non_nullable
+as String?,accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -165,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? name,  String? email,  String? department, @JsonKey(name: 'auth_token')  String? authToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? name,  String? phone,  String? email,  String? department,  String? accessToken,  String? createdAt,  String? role)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserResponse() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.department,_that.authToken,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.department,_that.accessToken,_that.createdAt,_that.role);case _:
   return orElse();
 
 }
@@ -186,10 +184,10 @@ return $default(_that.id,_that.name,_that.email,_that.department,_that.authToken
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? name,  String? email,  String? department, @JsonKey(name: 'auth_token')  String? authToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'updated_at')  String? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? name,  String? phone,  String? email,  String? department,  String? accessToken,  String? createdAt,  String? role)  $default,) {final _that = this;
 switch (_that) {
 case _UserResponse():
-return $default(_that.id,_that.name,_that.email,_that.department,_that.authToken,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.department,_that.accessToken,_that.createdAt,_that.role);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +204,10 @@ return $default(_that.id,_that.name,_that.email,_that.department,_that.authToken
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? name,  String? email,  String? department, @JsonKey(name: 'auth_token')  String? authToken, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? name,  String? phone,  String? email,  String? department,  String? accessToken,  String? createdAt,  String? role)?  $default,) {final _that = this;
 switch (_that) {
 case _UserResponse() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.department,_that.authToken,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.department,_that.accessToken,_that.createdAt,_that.role);case _:
   return null;
 
 }
@@ -218,19 +216,20 @@ return $default(_that.id,_that.name,_that.email,_that.department,_that.authToken
 }
 
 /// @nodoc
-@JsonSerializable()
 
-class _UserResponse with DiagnosticableTreeMixin implements UserResponse {
-  const _UserResponse({required this.id, this.name, this.email, this.department, @JsonKey(name: 'auth_token') this.authToken, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt});
-  factory _UserResponse.fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
 
-@override final  int id;
+class _UserResponse extends UserResponse with DiagnosticableTreeMixin {
+  const _UserResponse({this.id, this.name, this.phone, this.email, this.department, this.accessToken, this.createdAt, this.role}): super._();
+  
+
+@override final  int? id;
 @override final  String? name;
+@override final  String? phone;
 @override final  String? email;
 @override final  String? department;
-@override@JsonKey(name: 'auth_token') final  String? authToken;
-@override@JsonKey(name: 'created_at') final  String? createdAt;
-@override@JsonKey(name: 'updated_at') final  String? updatedAt;
+@override final  String? accessToken;
+@override final  String? createdAt;
+@override final  String? role;
 
 /// Create a copy of UserResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -238,29 +237,26 @@ class _UserResponse with DiagnosticableTreeMixin implements UserResponse {
 @pragma('vm:prefer-inline')
 _$UserResponseCopyWith<_UserResponse> get copyWith => __$UserResponseCopyWithImpl<_UserResponse>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$UserResponseToJson(this, );
-}
+
 @override
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'UserResponse'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('email', email))..add(DiagnosticsProperty('department', department))..add(DiagnosticsProperty('authToken', authToken))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('phone', phone))..add(DiagnosticsProperty('email', email))..add(DiagnosticsProperty('department', department))..add(DiagnosticsProperty('accessToken', accessToken))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('role', role));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.department, department) || other.department == department)&&(identical(other.authToken, authToken) || other.authToken == authToken)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.department, department) || other.department == department)&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.role, role) || other.role == role));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,department,authToken,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,phone,email,department,accessToken,createdAt,role);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'UserResponse(id: $id, name: $name, email: $email, department: $department, authToken: $authToken, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'UserResponse(id: $id, name: $name, phone: $phone, email: $email, department: $department, accessToken: $accessToken, createdAt: $createdAt, role: $role)';
 }
 
 
@@ -271,7 +267,7 @@ abstract mixin class _$UserResponseCopyWith<$Res> implements $UserResponseCopyWi
   factory _$UserResponseCopyWith(_UserResponse value, $Res Function(_UserResponse) _then) = __$UserResponseCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String? name, String? email, String? department,@JsonKey(name: 'auth_token') String? authToken,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'updated_at') String? updatedAt
+ int? id, String? name, String? phone, String? email, String? department, String? accessToken, String? createdAt, String? role
 });
 
 
@@ -288,15 +284,16 @@ class __$UserResponseCopyWithImpl<$Res>
 
 /// Create a copy of UserResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? email = freezed,Object? department = freezed,Object? authToken = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? phone = freezed,Object? email = freezed,Object? department = freezed,Object? accessToken = freezed,Object? createdAt = freezed,Object? role = freezed,}) {
   return _then(_UserResponse(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,department: freezed == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
-as String?,authToken: freezed == authToken ? _self.authToken : authToken // ignore: cast_nullable_to_non_nullable
+as String?,accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

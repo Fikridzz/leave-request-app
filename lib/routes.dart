@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leave_request_app/constants/app_constant.dart';
+import 'package:leave_request_app/domain/model/employee_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:leave_request_app/view/form/view/form_leave_view.dart';
 import 'package:leave_request_app/view/form/view/form_sick_view.dart';
@@ -34,13 +35,15 @@ class AppRouter {
         GoRoute(
           path: '/form-leave',
           builder: (context, state) {
-            return FormLeaveView();
+            final data = state.extra as EmployeeForm?;
+            return FormLeaveView(data);
           },
         ),
         GoRoute(
           path: '/form-sick',
           builder: (context, state) {
-            return FormSickView();
+            final data = state.extra as EmployeeForm?;
+            return FormSickView(data);
           },
         ),
       ],

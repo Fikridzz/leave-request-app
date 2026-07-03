@@ -1,31 +1,35 @@
 class EmployeeForm {
+  final int id;
   final String? type;
-  final String? employeeName;
+  final String? name;
   final String? department;
   final String? submissionDate;
-  final String? eventDate;
+  final String? startDate;
   final int? totalDays;   
-  final int? userId;
+  final String? reason;
+  final String? status;
 
   EmployeeForm({
+    this.id = 0,
     this.type,
-    this.employeeName,
+    this.name,
     this.department,
     this.submissionDate,
-    this.eventDate,
+    this.startDate,
     this.totalDays,
-    this.userId,
+    this.reason,
+    this.status,
   });
 
   factory EmployeeForm.fromMap(Map<String, dynamic> map) {
     return EmployeeForm(
+      id: map['id'],
       type: map['type'],
-      employeeName: map['employee_name'],
+      name: map['employee_name'],
       department: map['department'],
       submissionDate: map['submission_date'],
-      eventDate: map['event_date'],
+      startDate: map['start_date'],
       totalDays: map['total_days'],
-      userId: map['user_id'],
     );
   }
 }

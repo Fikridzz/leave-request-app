@@ -31,13 +31,15 @@ class LoginController extends _$LoginController {
           (e) => User(
             id: e.id,
             name: e.name ?? '',
+            phone: e.phone ?? '',
             department: e.department,
             phoneNumber: 0,
             email: e.email ?? '',
+            role: e.role ?? '',
           ),
         );
 
-        storage.saveToken(response.authToken ?? '');
+        storage.saveToken(response.accessToken ?? '');
         storage.saveUser(user.toMap());
       }
     });

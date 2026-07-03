@@ -1,37 +1,35 @@
+import 'dart:io';
+
+import 'package:leave_request_app/constants/submission_status.dart';
+
 class DataLeaveForm {
-  final int? id;
-  final String? employeeName;
-  final String? department;
+  final String? type;
   final String? submissionDate;
-  final String? leaveDate;
-  final int? totalLeaveDay;
+  final String? startDate;
+  final int? totalDays;
   final String? reasone;
-  // final String? autograph;
-  final int? userId;
+  final SubmissionStatus status;
+  final File? autograph;
 
   DataLeaveForm({
-    this.id,
-    this.employeeName,
-    this.department,
+    this.type,
     this.submissionDate,
-    this.leaveDate,
-    this.totalLeaveDay,
+    this.startDate,
+    this.totalDays,
     this.reasone,
-    // this.autograph,
-    this.userId,
+    this.status = SubmissionStatus.pending,
+    this.autograph,
   });
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
-      'id': id,
-      'employee_name': employeeName,
-      'department': department,
+      'type': type,
       'submission_date': submissionDate,
-      'leave_date': leaveDate,
-      'total_leave_day': totalLeaveDay,
-      'reasone': reasone,
-      // 'autograph': autograph,
-      'user_id': userId,
+      'start_date': startDate,
+      'total_days': totalDays,
+      'reason': reasone,
+      'status': status.name,
+      'autograph': autograph,
     };
 
     return map;
@@ -39,15 +37,13 @@ class DataLeaveForm {
 
   factory DataLeaveForm.fromMap(Map<String, dynamic> map) {
     return DataLeaveForm(
-      id: map['id'],
-      employeeName: map['employee_namme'],
-      department: map['department'],
+      type: map['type'],
       submissionDate: map['submission_date'],
-      leaveDate: map['leave_date'],
-      totalLeaveDay: map['total_leave_day'],
-      reasone: map['reasone'],
-      // autograph: map['autograph'],
-      userId: map['user_id'],
+      startDate: map['start_date'],
+      totalDays: map['total_days'],
+      reasone: map['reason'],
+      status: map['status'],
+      autograph: map['autograph'],
     );
   }
 }

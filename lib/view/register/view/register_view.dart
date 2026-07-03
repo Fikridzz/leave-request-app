@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:leave_request_app/domain/model/user.dart';
+import 'package:leave_request_app/domain/model/data_user.dart';
 import 'package:leave_request_app/helper/text_validator.dart';
 import 'package:leave_request_app/view/register/controller/register_controller.dart';
 
@@ -17,6 +17,10 @@ class RegisterView extends HookConsumerWidget {
     final emailCtrl = useTextEditingController();
     final passwordCtrl = useTextEditingController();
     final obscureText = useState<bool>(true);
+
+    // ref.listen(registerControllerProvider, (previoues, next) {
+    //   context.pushReplacement('/');
+    // });
 
     return SafeArea(
       child: Scaffold(
@@ -181,21 +185,19 @@ class RegisterView extends HookConsumerWidget {
                           child: ElevatedButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                // ref
-                                //     .read(registerControllerProvider.notifier)
-                                //     .insertUser(
-                                //       user: User(
-                                //         name: nameCtrl.text,
-                                //         phoneNumber: int.parse(
-                                //           phoneNumberCtrl.text,
-                                //         ),
-                                //         email: emailCtrl.text,
-                                //         password: passwordCtrl.text,
-                                //       ),
-                                //       onSuccess: () {
-                                //         context.pushReplacement('/login');
-                                //       },
-                                //     );
+                                ref
+                                    .read(registerControllerProvider.notifier)
+                                    .insertUser(
+                                      data: DataUser(
+                                        name: nameCtrl.text,
+                                        phone: phoneNumberCtrl.text,
+                                        department: 'Office',
+                                        email: emailCtrl.text,
+                                        password: passwordCtrl.text,
+                                        role: 'user',
+                                      ),
+                                      onSuccess: () => context.pushReplacement('/'),
+                                    );
                               }
                             },
                             style: ElevatedButton.styleFrom(
