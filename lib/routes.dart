@@ -35,22 +35,32 @@ class AppRouter {
         GoRoute(
           path: '/form-leave',
           builder: (context, state) {
-            final data = state.extra as EmployeeForm?;
-            return FormLeaveView(data);
+            Map<String, dynamic>? data = state.extra as Map<String, dynamic>?;
+
+            return FormLeaveView(
+              initialData: data?['data'],
+              isSubmission: data?['is_submission'],
+            );
           },
         ),
         GoRoute(
           path: '/form-sick',
           builder: (context, state) {
-            final data = state.extra as EmployeeForm?;
-            return FormSickView(data);
+            Map<String, dynamic>? data = state.extra as Map<String, dynamic>?;
+
+            return FormSickView(
+              initialData: data?['data'],
+              isSubmission: data?['is_submission'],
+            );
           },
         ),
       ],
       redirect: (context, state) {
         final authToken = prefs.getString(AppConstant.tokenKey);
 
-        if (authToken != null && authToken.isNotEmpty && state.fullPath == '/login') {
+        if (authToken != null &&
+            authToken.isNotEmpty &&
+            state.fullPath == '/login') {
           return '/';
         }
 

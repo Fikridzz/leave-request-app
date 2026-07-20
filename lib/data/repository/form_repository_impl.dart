@@ -119,6 +119,28 @@ class FormRepositoryImpl implements FormRepository {
       throw ApiException('An unexpected error occurred.');
     }
   }
+
+  @override
+  Future<void> deleteForm(int id) async {
+    try {
+      final response = await client.delete(
+        '${AppConstant.leaveRequestEndpoint}/$id',
+      );
+    } on DioException catch (e) {
+      if (e.response != null) {
+        // Handle server error
+        final serverMessage =
+            e.response?.data['message'] ?? 'Server error occurred';
+        throw ApiException(serverMessage);
+      } else {
+        // Handel no response from server
+        throw ApiException('Network error. Please check your connection.');
+      }
+    } catch (e) {
+      // Handel unexpected error
+      throw ApiException('An unexpected error occurred.');
+    }
+  }
 }
 
 @riverpod

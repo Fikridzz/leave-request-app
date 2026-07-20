@@ -7,8 +7,10 @@ part 'leave_request_response.g.dart';
 
 @freezed
 abstract class LeaveRequestResponse with _$LeaveRequestResponse {
-  const factory LeaveRequestResponse({List<EmployeeFormResponse>? data, Meta? meta}) =
-      _LeaveRequestResponse;
+  const factory LeaveRequestResponse({
+    List<EmployeeFormResponse>? data,
+    Meta? meta,
+  }) = _LeaveRequestResponse;
 
   factory LeaveRequestResponse.fromJson(Map<String, Object?> json) =>
       _$LeaveRequestResponseFromJson(json);
@@ -24,6 +26,7 @@ abstract class EmployeeFormResponse with _$EmployeeFormResponse {
     @JsonKey(name: 'total_days') int? totalDays,
     String? reason,
     String? status,
+    String? autograph,
     UserResponse? user,
   }) = _EmployeeFormResponse;
 

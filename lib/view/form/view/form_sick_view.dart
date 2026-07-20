@@ -13,15 +13,15 @@ import 'package:leave_request_app/domain/model/data_leave_form.dart';
 import 'package:leave_request_app/domain/model/employee_form.dart';
 import 'package:leave_request_app/helper/auth_storage_service.dart';
 import 'package:leave_request_app/helper/string_extension.dart';
+import 'package:leave_request_app/widgets/form_status.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signature/signature.dart';
-import 'package:leave_request_app/domain/model/user.dart';
 import 'package:leave_request_app/view/form/controller/form_controller.dart';
 
 class FormSickView extends HookConsumerWidget {
   final EmployeeForm? initialData;
-  const FormSickView(this.initialData, {super.key});
+  final bool? isSubmission;
+  const FormSickView({super.key, this.initialData, this.isSubmission = false});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = GlobalKey<FormState>();
@@ -56,30 +56,56 @@ class FormSickView extends HookConsumerWidget {
     }, []);
 
     ref.listen(formControllerProvider, (previoues, next) {
-      context.pop();
+      _showDialogSuccess(context);
     });
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'Form Sakit',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           actions: [
-            PopupMenuButton(
-              onSelected: (value) => ref
-                  .read(formControllerProvider.notifier)
-                  .updateFormStatus(initialData ?? EmployeeForm(), value.name),
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    value: SubmissionStatus.approved,
-                    child: Text('Setuju'),
-                  ),
-                  PopupMenuItem(
-                    value: SubmissionStatus.rejected,
-                    child: Text('Tolak'),
-                  ),
-                ];
-              },
-            ),
+            isSubmission == false && storage?.role == 'admin'
+                ? PopupMenuButton(
+                    onSelected: (value) => ref
+                        .read(formControllerProvider.notifier)
+                        .updateFormStatus(
+                          initialData ?? EmployeeForm(),
+                          value.name,
+                        ),
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                          value: SubmissionStatus.approved,
+                          child: Text('Setuju'),
+                        ),
+                        PopupMenuItem(
+                          value: SubmissionStatus.rejected,
+                          child: Text('Tolak'),
+                        ),
+                      ];
+                    },
+                  )
+                : SizedBox(),
+            isSubmission == true &&
+                    initialData?.status == SubmissionStatus.pending.name
+                ? PopupMenuButton(
+                    onSelected: (value) => ref
+                        .read(formControllerProvider.notifier)
+                        .deleteForm(initialData?.id ?? 0),
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                          value: SubmissionStatus.rejected,
+                          child: Text('Hapus'),
+                        ),
+                      ];
+                    },
+                  )
+                : SizedBox(),
           ],
           actionsPadding: EdgeInsets.symmetric(horizontal: 16),
         ),
@@ -95,13 +121,21 @@ class FormSickView extends HookConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Form Sakit',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Form Sakit',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            initialData != null
+                                ? formStatus(initialData?.status ?? '')
+                                : SizedBox(),
+                          ],
                         ),
                         SizedBox(height: 36),
                         TextFormField(
@@ -302,26 +336,36 @@ class FormSickView extends HookConsumerWidget {
                           ),
                         ),
                         SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () {
-                            if (initialData == null) {
-                              showDialogSignature(
-                                context,
-                                signatureCtrl,
-                                signatureImg,
-                              );
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            color: Colors.grey[300],
-                            width: 160,
-                            height: 120,
-                            child: signatureImg.value != null
-                                ? Image.file(signatureImg.value!)
-                                : Text('Tanda tanggan'),
-                          ),
-                        ),
+                        initialData != null
+                            ? Container(
+                                alignment: Alignment.center,
+                                color: Colors.grey[300],
+                                width: 160,
+                                height: 120,
+                                child: Image.network(
+                                  initialData?.autograph ?? '',
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  if (initialData == null) {
+                                    showDialogSignature(
+                                      context,
+                                      signatureCtrl,
+                                      signatureImg,
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: Colors.grey[300],
+                                  width: 160,
+                                  height: 120,
+                                  child: signatureImg.value != null
+                                      ? Image.file(signatureImg.value!)
+                                      : Text('Tanda tanggan'),
+                                ),
+                              ),
                         SizedBox(height: 8),
                         Text('(${nameCtrl.text})'),
                         Spacer(),
@@ -441,7 +485,7 @@ class FormSickView extends HookConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
                       child: Text(
@@ -461,6 +505,13 @@ class FormSickView extends HookConsumerWidget {
                         exportImage(dialogContext, signatureCtrl, signatureImg);
                         dialogContext.pop();
                       },
+                    ),
+                    Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      icon: Icon(Icons.close),
                     ),
                   ],
                 ),
@@ -503,5 +554,40 @@ class FormSickView extends HookConsumerWidget {
 
     file.writeAsBytesSync(data);
     signatureImg.value = file;
+  }
+
+  Future<void> _showDialogSuccess(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          icon: SizedBox(
+            height: 240,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.check, color: Colors.white, size: 36),
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'Berhasil menambahkan data',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (context.mounted) {
+      context.pop();
+    }
   }
 }

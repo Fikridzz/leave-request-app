@@ -25,5 +25,6 @@ extension EmployeFormMapper on EmployeeFormResponse {
     totalDays: totalDays,
     reason: reason,
     status: status,
+    autograph: autograph,
   );
 }

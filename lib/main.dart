@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:leave_request_app/helper/auth_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:leave_request_app/helper/shared_preferences_provider.dart';
 import 'package:leave_request_app/routes.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await initializeDateFormatting('id', null);
+
   runApp(MainApp(prefs));
 }
 
@@ -25,7 +27,7 @@ class MainApp extends HookConsumerWidget {
           // brightness: Brightness.light
         ),
         debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter.router(prefs)
+        routerConfig: AppRouter.router(prefs),
       ),
     );
   }

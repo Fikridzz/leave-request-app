@@ -8,4 +8,5 @@ abstract class FormRepository {
   Future<LeaveRequestResponse> employeeForms();
   Future<LeaveRequestResponse> employeeFormsStatus(String status);
   Future<void> updateFormStatus(EmployeeForm data, String status);
+  Future<void> deleteForm(int id);
 }

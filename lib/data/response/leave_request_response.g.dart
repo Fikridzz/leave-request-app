@@ -31,6 +31,7 @@ _EmployeeFormResponse _$EmployeeFormResponseFromJson(
   totalDays: (json['total_days'] as num?)?.toInt(),
   reason: json['reason'] as String?,
   status: json['status'] as String?,
+  autograph: json['autograph'] as String?,
   user: json['user'] == null
       ? null
       : UserResponse.fromJson(json['user'] as Map<String, dynamic>),
@@ -46,6 +47,7 @@ Map<String, dynamic> _$EmployeeFormResponseToJson(
   'total_days': instance.totalDays,
   'reason': instance.reason,
   'status': instance.status,
+  'autograph': instance.autograph,
   'user': instance.user,
 };
 

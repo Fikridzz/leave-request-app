@@ -7,6 +7,7 @@ import 'package:leave_request_app/domain/model/employee_form.dart';
 import 'package:leave_request_app/helper/auth_storage_service.dart';
 import 'package:leave_request_app/helper/string_extension.dart';
 import 'package:leave_request_app/view/home/controller/home_controller.dart';
+import 'package:leave_request_app/widgets/form_status.dart';
 
 class SubmissionView extends HookConsumerWidget {
   const SubmissionView({super.key});
@@ -39,14 +40,16 @@ class SubmissionView extends HookConsumerWidget {
                       right: 36,
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Mengajukan',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                        Align(
+                          alignment: AlignmentGeometry.topLeft,
+                          child: Text(
+                            'Pengajuan',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -58,7 +61,7 @@ class SubmissionView extends HookConsumerWidget {
                                   return Column(
                                     children: [
                                       SizedBox(height: 24),
-                                      itemForm(data[index], context, ref),
+                                      itemForm(data[index], context, ref, true),
                                     ],
                                   );
                                 },
@@ -67,7 +70,8 @@ class SubmissionView extends HookConsumerWidget {
                             error: (e, stackTrace) {
                               return SizedBox();
                             },
-                            loading: () => SizedBox(),
+                            loading: () =>
+                                Center(child: CircularProgressIndicator()),
                           ),
                         ),
                       ],
@@ -83,7 +87,7 @@ class SubmissionView extends HookConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Pengajuan',
+                          'Mengajukan',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -99,7 +103,12 @@ class SubmissionView extends HookConsumerWidget {
                                   return Column(
                                     children: [
                                       SizedBox(height: 24),
-                                      itemForm(data[index], context, ref),
+                                      itemForm(
+                                        data[index],
+                                        context,
+                                        ref,
+                                        false,
+                                      ),
                                     ],
                                   );
                                 },
@@ -108,7 +117,8 @@ class SubmissionView extends HookConsumerWidget {
                             error: (e, stackTrace) {
                               return SizedBox();
                             },
-                            loading: () => SizedBox(),
+                            loading: () =>
+                                Center(child: CircularProgressIndicator()),
                           ),
                         ),
                       ],
@@ -140,7 +150,7 @@ class SubmissionView extends HookConsumerWidget {
                           return Column(
                             children: [
                               SizedBox(height: 24),
-                              itemForm(data[index], context, ref),
+                              itemForm(data[index], context, ref, false),
                             ],
                           );
                         },
@@ -149,7 +159,7 @@ class SubmissionView extends HookConsumerWidget {
                     error: (e, stackTrace) {
                       return SizedBox();
                     },
-                    loading: () => SizedBox(),
+                    loading: () => Center(child: CircularProgressIndicator()),
                   ),
                 ),
               ],
@@ -157,20 +167,33 @@ class SubmissionView extends HookConsumerWidget {
           );
   }
 
-  Widget itemForm(EmployeeForm data, BuildContext context, WidgetRef ref) {
+  Widget itemForm(
+    EmployeeForm data,
+    BuildContext context,
+    WidgetRef ref,
+    bool isSubmission,
+  ) {
     return GestureDetector(
       onTap: () async {
         if (data.type == SubmissionType.leave.name) {
-          await context.push('/form-leave', extra: data);
+          await context.push(
+            '/form-leave',
+            extra: {'data': data, 'is_submission': isSubmission},
+          );
+          ref.invalidate(getEmployeeFormProvider);
+          ref.invalidate(
+            getEmployeeFormStatusProvider(SubmissionStatus.pending.name),
+          );
         } else {
-          await context.push('/form-sick', extra: data);
+          await context.push(
+            '/form-sick',
+            extra: {'data': data, 'is_submission': isSubmission},
+          );
+          ref.invalidate(getEmployeeFormProvider);
+          ref.invalidate(
+            getEmployeeFormStatusProvider(SubmissionStatus.pending.name),
+          );
         }
-
-        // Automatically Destroys cached state and forces to call api
-        ref.invalidate(getEmployeeFormProvider);
-        ref.invalidate(
-          getEmployeeFormStatusProvider(SubmissionStatus.pending.name),
-        );
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -187,7 +210,7 @@ class SubmissionView extends HookConsumerWidget {
                   "Pengajuan ${data.type == 'leave' ? 'Cuti' : 'Sakit'}",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                _formStatus(data.status ?? ''),
+                formStatus(data.status ?? ''),
               ],
             ),
             SizedBox(height: 4),
@@ -211,58 +234,5 @@ class SubmissionView extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  Widget _formStatus(String status) {
-    switch (SubmissionStatus.values.byName(status)) {
-      case SubmissionStatus.pending:
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-          decoration: BoxDecoration(
-            color: Color(0xFFFDE7B3),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            'Menunggu',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: Color(0xFFF97A00),
-            ),
-          ),
-        );
-      case SubmissionStatus.approved:
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-          decoration: BoxDecoration(
-            color: Color(0xFFCBF3BB),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            'Disetujui',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: Color(0xFF1F7D2C),
-            ),
-          ),
-        );
-      case SubmissionStatus.rejected:
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-          decoration: BoxDecoration(
-            color: Color(0xFFF7CAC9),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            'Ditolak',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: Color(0xFFDC143C),
-            ),
-          ),
-        );
-    }
   }
 }

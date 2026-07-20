@@ -325,7 +325,7 @@ $MetaCopyWith<$Res>? get meta {
 /// @nodoc
 mixin _$EmployeeFormResponse implements DiagnosticableTreeMixin {
 
- int get id; String? get type;@JsonKey(name: 'submission_date') String? get submissionDate;@JsonKey(name: 'start_date') String? get startDate;@JsonKey(name: 'total_days') int? get totalDays; String? get reason; String? get status; UserResponse? get user;
+ int get id; String? get type;@JsonKey(name: 'submission_date') String? get submissionDate;@JsonKey(name: 'start_date') String? get startDate;@JsonKey(name: 'total_days') int? get totalDays; String? get reason; String? get status; String? get autograph; UserResponse? get user;
 /// Create a copy of EmployeeFormResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -339,21 +339,21 @@ $EmployeeFormResponseCopyWith<EmployeeFormResponse> get copyWith => _$EmployeeFo
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'EmployeeFormResponse'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('type', type))..add(DiagnosticsProperty('submissionDate', submissionDate))..add(DiagnosticsProperty('startDate', startDate))..add(DiagnosticsProperty('totalDays', totalDays))..add(DiagnosticsProperty('reason', reason))..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('user', user));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('type', type))..add(DiagnosticsProperty('submissionDate', submissionDate))..add(DiagnosticsProperty('startDate', startDate))..add(DiagnosticsProperty('totalDays', totalDays))..add(DiagnosticsProperty('reason', reason))..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('autograph', autograph))..add(DiagnosticsProperty('user', user));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EmployeeFormResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.submissionDate, submissionDate) || other.submissionDate == submissionDate)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.totalDays, totalDays) || other.totalDays == totalDays)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EmployeeFormResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.submissionDate, submissionDate) || other.submissionDate == submissionDate)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.totalDays, totalDays) || other.totalDays == totalDays)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.status, status) || other.status == status)&&(identical(other.autograph, autograph) || other.autograph == autograph)&&(identical(other.user, user) || other.user == user));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,submissionDate,startDate,totalDays,reason,status,user);
+int get hashCode => Object.hash(runtimeType,id,type,submissionDate,startDate,totalDays,reason,status,autograph,user);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'EmployeeFormResponse(id: $id, type: $type, submissionDate: $submissionDate, startDate: $startDate, totalDays: $totalDays, reason: $reason, status: $status, user: $user)';
+  return 'EmployeeFormResponse(id: $id, type: $type, submissionDate: $submissionDate, startDate: $startDate, totalDays: $totalDays, reason: $reason, status: $status, autograph: $autograph, user: $user)';
 }
 
 
@@ -364,7 +364,7 @@ abstract mixin class $EmployeeFormResponseCopyWith<$Res>  {
   factory $EmployeeFormResponseCopyWith(EmployeeFormResponse value, $Res Function(EmployeeFormResponse) _then) = _$EmployeeFormResponseCopyWithImpl;
 @useResult
 $Res call({
- int id, String? type,@JsonKey(name: 'submission_date') String? submissionDate,@JsonKey(name: 'start_date') String? startDate,@JsonKey(name: 'total_days') int? totalDays, String? reason, String? status, UserResponse? user
+ int id, String? type,@JsonKey(name: 'submission_date') String? submissionDate,@JsonKey(name: 'start_date') String? startDate,@JsonKey(name: 'total_days') int? totalDays, String? reason, String? status, String? autograph, UserResponse? user
 });
 
 
@@ -381,7 +381,7 @@ class _$EmployeeFormResponseCopyWithImpl<$Res>
 
 /// Create a copy of EmployeeFormResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = freezed,Object? submissionDate = freezed,Object? startDate = freezed,Object? totalDays = freezed,Object? reason = freezed,Object? status = freezed,Object? user = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = freezed,Object? submissionDate = freezed,Object? startDate = freezed,Object? totalDays = freezed,Object? reason = freezed,Object? status = freezed,Object? autograph = freezed,Object? user = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -390,6 +390,7 @@ as String?,startDate: freezed == startDate ? _self.startDate : startDate // igno
 as String?,totalDays: freezed == totalDays ? _self.totalDays : totalDays // ignore: cast_nullable_to_non_nullable
 as int?,reason: freezed == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,autograph: freezed == autograph ? _self.autograph : autograph // ignore: cast_nullable_to_non_nullable
 as String?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserResponse?,
   ));
@@ -488,10 +489,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? type, @JsonKey(name: 'submission_date')  String? submissionDate, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'total_days')  int? totalDays,  String? reason,  String? status,  UserResponse? user)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? type, @JsonKey(name: 'submission_date')  String? submissionDate, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'total_days')  int? totalDays,  String? reason,  String? status,  String? autograph,  UserResponse? user)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EmployeeFormResponse() when $default != null:
-return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.totalDays,_that.reason,_that.status,_that.user);case _:
+return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.totalDays,_that.reason,_that.status,_that.autograph,_that.user);case _:
   return orElse();
 
 }
@@ -509,10 +510,10 @@ return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? type, @JsonKey(name: 'submission_date')  String? submissionDate, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'total_days')  int? totalDays,  String? reason,  String? status,  UserResponse? user)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? type, @JsonKey(name: 'submission_date')  String? submissionDate, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'total_days')  int? totalDays,  String? reason,  String? status,  String? autograph,  UserResponse? user)  $default,) {final _that = this;
 switch (_that) {
 case _EmployeeFormResponse():
-return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.totalDays,_that.reason,_that.status,_that.user);case _:
+return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.totalDays,_that.reason,_that.status,_that.autograph,_that.user);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -529,10 +530,10 @@ return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? type, @JsonKey(name: 'submission_date')  String? submissionDate, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'total_days')  int? totalDays,  String? reason,  String? status,  UserResponse? user)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? type, @JsonKey(name: 'submission_date')  String? submissionDate, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'total_days')  int? totalDays,  String? reason,  String? status,  String? autograph,  UserResponse? user)?  $default,) {final _that = this;
 switch (_that) {
 case _EmployeeFormResponse() when $default != null:
-return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.totalDays,_that.reason,_that.status,_that.user);case _:
+return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.totalDays,_that.reason,_that.status,_that.autograph,_that.user);case _:
   return null;
 
 }
@@ -544,7 +545,7 @@ return $default(_that.id,_that.type,_that.submissionDate,_that.startDate,_that.t
 @JsonSerializable()
 
 class _EmployeeFormResponse with DiagnosticableTreeMixin implements EmployeeFormResponse {
-  const _EmployeeFormResponse({required this.id, this.type, @JsonKey(name: 'submission_date') this.submissionDate, @JsonKey(name: 'start_date') this.startDate, @JsonKey(name: 'total_days') this.totalDays, this.reason, this.status, this.user});
+  const _EmployeeFormResponse({required this.id, this.type, @JsonKey(name: 'submission_date') this.submissionDate, @JsonKey(name: 'start_date') this.startDate, @JsonKey(name: 'total_days') this.totalDays, this.reason, this.status, this.autograph, this.user});
   factory _EmployeeFormResponse.fromJson(Map<String, dynamic> json) => _$EmployeeFormResponseFromJson(json);
 
 @override final  int id;
@@ -554,6 +555,7 @@ class _EmployeeFormResponse with DiagnosticableTreeMixin implements EmployeeForm
 @override@JsonKey(name: 'total_days') final  int? totalDays;
 @override final  String? reason;
 @override final  String? status;
+@override final  String? autograph;
 @override final  UserResponse? user;
 
 /// Create a copy of EmployeeFormResponse
@@ -570,21 +572,21 @@ Map<String, dynamic> toJson() {
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'EmployeeFormResponse'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('type', type))..add(DiagnosticsProperty('submissionDate', submissionDate))..add(DiagnosticsProperty('startDate', startDate))..add(DiagnosticsProperty('totalDays', totalDays))..add(DiagnosticsProperty('reason', reason))..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('user', user));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('type', type))..add(DiagnosticsProperty('submissionDate', submissionDate))..add(DiagnosticsProperty('startDate', startDate))..add(DiagnosticsProperty('totalDays', totalDays))..add(DiagnosticsProperty('reason', reason))..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('autograph', autograph))..add(DiagnosticsProperty('user', user));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmployeeFormResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.submissionDate, submissionDate) || other.submissionDate == submissionDate)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.totalDays, totalDays) || other.totalDays == totalDays)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmployeeFormResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.submissionDate, submissionDate) || other.submissionDate == submissionDate)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.totalDays, totalDays) || other.totalDays == totalDays)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.status, status) || other.status == status)&&(identical(other.autograph, autograph) || other.autograph == autograph)&&(identical(other.user, user) || other.user == user));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,type,submissionDate,startDate,totalDays,reason,status,user);
+int get hashCode => Object.hash(runtimeType,id,type,submissionDate,startDate,totalDays,reason,status,autograph,user);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'EmployeeFormResponse(id: $id, type: $type, submissionDate: $submissionDate, startDate: $startDate, totalDays: $totalDays, reason: $reason, status: $status, user: $user)';
+  return 'EmployeeFormResponse(id: $id, type: $type, submissionDate: $submissionDate, startDate: $startDate, totalDays: $totalDays, reason: $reason, status: $status, autograph: $autograph, user: $user)';
 }
 
 
@@ -595,7 +597,7 @@ abstract mixin class _$EmployeeFormResponseCopyWith<$Res> implements $EmployeeFo
   factory _$EmployeeFormResponseCopyWith(_EmployeeFormResponse value, $Res Function(_EmployeeFormResponse) _then) = __$EmployeeFormResponseCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String? type,@JsonKey(name: 'submission_date') String? submissionDate,@JsonKey(name: 'start_date') String? startDate,@JsonKey(name: 'total_days') int? totalDays, String? reason, String? status, UserResponse? user
+ int id, String? type,@JsonKey(name: 'submission_date') String? submissionDate,@JsonKey(name: 'start_date') String? startDate,@JsonKey(name: 'total_days') int? totalDays, String? reason, String? status, String? autograph, UserResponse? user
 });
 
 
@@ -612,7 +614,7 @@ class __$EmployeeFormResponseCopyWithImpl<$Res>
 
 /// Create a copy of EmployeeFormResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = freezed,Object? submissionDate = freezed,Object? startDate = freezed,Object? totalDays = freezed,Object? reason = freezed,Object? status = freezed,Object? user = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = freezed,Object? submissionDate = freezed,Object? startDate = freezed,Object? totalDays = freezed,Object? reason = freezed,Object? status = freezed,Object? autograph = freezed,Object? user = freezed,}) {
   return _then(_EmployeeFormResponse(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -621,6 +623,7 @@ as String?,startDate: freezed == startDate ? _self.startDate : startDate // igno
 as String?,totalDays: freezed == totalDays ? _self.totalDays : totalDays // ignore: cast_nullable_to_non_nullable
 as int?,reason: freezed == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,autograph: freezed == autograph ? _self.autograph : autograph // ignore: cast_nullable_to_non_nullable
 as String?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserResponse?,
   ));

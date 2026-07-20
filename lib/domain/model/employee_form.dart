@@ -5,9 +5,10 @@ class EmployeeForm {
   final String? department;
   final String? submissionDate;
   final String? startDate;
-  final int? totalDays;   
+  final int? totalDays;
   final String? reason;
   final String? status;
+  final String? autograph;
 
   EmployeeForm({
     this.id = 0,
@@ -19,6 +20,7 @@ class EmployeeForm {
     this.totalDays,
     this.reason,
     this.status,
+    this.autograph,
   });
 
   factory EmployeeForm.fromMap(Map<String, dynamic> map) {

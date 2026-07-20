@@ -26,4 +26,12 @@ class FormController extends _$FormController {
       repository.updateFormStatus(data, status);
     });
   }
+
+  Future<void> deleteForm(int id) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repository = ref.watch(formRepositoryProvider);
+      repository.deleteForm(id);
+    });
+  }
 }
